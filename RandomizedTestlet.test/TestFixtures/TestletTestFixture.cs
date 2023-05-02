@@ -1,4 +1,6 @@
 ﻿using NUnit.Framework;
+using RandomizedTestlet.library.Entities;
+using RandomizedTestlet.library.Enums;
 
 namespace RandomizedTestlet.test.TestFixtures
 {
@@ -137,9 +139,9 @@ namespace RandomizedTestlet.test.TestFixtures
                 Enumerable.Range(0, 10)
                     .Count(i =>
                     {
-                        return items[i].Id.Equals(randomizedItems1[i].Id) ||
-                               items[i].Id.Equals(randomizedItems2[i].Id) ||
-                               randomizedItems1[i].Id.Equals(randomizedItems2[i].Id);
+                        return items[i].ItemId.Equals(randomizedItems1[i].ItemId) ||
+                               items[i].ItemId.Equals(randomizedItems2[i].ItemId) ||
+                               randomizedItems1[i].ItemId.Equals(randomizedItems2[i].ItemId);
                     }) > 2
             );
         }
