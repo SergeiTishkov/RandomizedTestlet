@@ -87,7 +87,7 @@ namespace RandomizedTestlet.test.TestFixtures
         }
 
         [TestCaseSource(nameof(GetTestItemsDataSource))]
-        public void RandomizeDoesntChangeItemObjects(List<Item> items)
+        public void RandomizeDoesntChangeItemObjectsOrIds(List<Item> items)
         {
             var testlet = new Testlet("some ID", items);
 
@@ -95,7 +95,8 @@ namespace RandomizedTestlet.test.TestFixtures
 
             items.ForEach(item =>
             {
-                Assert.IsNotNull(randomizedTestItems.Any(randomizedTestItem => object.ReferenceEquals(randomizedTestItem, item)));
+                Assert.IsNotNull(randomizedTestItems.Any(randomizedTestItem =>
+                        ReferenceEquals(randomizedTestItem, item) && randomizedTestItem.ItemId.Equals(item.ItemId)));
             });
         }
 
@@ -110,7 +111,7 @@ namespace RandomizedTestlet.test.TestFixtures
             {
                 Assert.DoesNotThrow(() =>
                 {
-                    randomizedTestItems.Single(randomizedTestItem => object.ReferenceEquals(randomizedTestItem, item));
+                    randomizedTestItems.Single(randomizedTestItem => ReferenceEquals(randomizedTestItem, item));
                 });
             });
         }
@@ -122,7 +123,7 @@ namespace RandomizedTestlet.test.TestFixtures
 
             var randomizedTestItems = testlet.Randomize();
 
-            Assert.IsTrue(items.Take(2).All(item => item.ItemType == ItemTypeEnum.Pretest));
+            Assert.IsTrue(randomizedTestItems.Take(2).All(item => item.ItemType == ItemTypeEnum.Pretest));
         }
 
         [TestCaseSource(nameof(GetTestItemsDataSource))]
@@ -130,18 +131,18 @@ namespace RandomizedTestlet.test.TestFixtures
         {
             var testlet = new Testlet("some ID", items);
 
-            var randomizedItems1 = testlet.Randomize().Skip(2).ToList();
-            var randomizedItems2 = testlet.Randomize().Skip(2).ToList();
+            var randomizedItems1 = testlet.Randomize();
+            var randomizedItems2 = testlet.Randomize();
 
             // sometime this test might eventually fail (and this is expected!)
-            // so to reduce the amount of false fails we use 2 arraus of results here
+            // so to reduce the amount of false fails we use 2 arrays of results here
             Assert.IsTrue(
                 Enumerable.Range(0, 10)
                     .Count(i =>
                     {
-                        return items[i].ItemId.Equals(randomizedItems1[i].ItemId) ||
-                               items[i].ItemId.Equals(randomizedItems2[i].ItemId) ||
-                               randomizedItems1[i].ItemId.Equals(randomizedItems2[i].ItemId);
+                        return items[i].ItemId != randomizedItems1[i].ItemId ||
+                               items[i].ItemId != randomizedItems2[i].ItemId ||
+                               randomizedItems1[i].ItemId != randomizedItems2[i].ItemId;
                     }) > 2
             );
         }

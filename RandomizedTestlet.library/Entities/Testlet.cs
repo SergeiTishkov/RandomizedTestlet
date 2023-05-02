@@ -1,4 +1,4 @@
-﻿using System.Runtime.ConstrainedExecution;
+﻿using RandomizedTestlet.library.Enums;
 
 namespace RandomizedTestlet.library.Entities
 {
@@ -11,11 +11,46 @@ namespace RandomizedTestlet.library.Entities
             TestletId = testletId;
             Items = items;
         }
+
         public List<Item> Randomize()
         {
-            //Items private collection has 6 Operational and 4 Pretest Items. Randomize the order of these items as per the requirement(with TDD)
-            //The assignment will be reviewed on the basis of – Tests written first, Correct logic, Well structured &clean readable code.
-            return null;
+            var pretestItems = new List<Item>();
+            var operationalItems = new List<Item>();
+
+            foreach (var item in Items)
+            {
+                if (item.ItemType == ItemTypeEnum.Pretest)
+                {
+                    pretestItems.Add(item);
+                }
+                else
+                {
+                    operationalItems.Add(item);
+                }
+            }
+
+            pretestItems = Shuffle(pretestItems);
+
+            return pretestItems.Take(2).Concat(Shuffle(pretestItems.Skip(2), operationalItems)).ToList();
+        }
+
+        private List<Item> Shuffle(params IEnumerable<Item>[] items)
+        {
+            var rng = new Random();
+            var list = items.SelectMany(i => i).ToList();
+
+            int n = list.Count;
+
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                var value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+
+            return list;
         }
     }
 }
