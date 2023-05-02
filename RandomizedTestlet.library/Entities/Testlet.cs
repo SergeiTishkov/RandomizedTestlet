@@ -6,6 +6,7 @@ namespace RandomizedTestlet.library.Entities
     {
         public string TestletId;
         private List<Item> Items;
+
         public Testlet(string testletId, List<Item> items)
         {
             TestletId = testletId;
@@ -31,13 +32,17 @@ namespace RandomizedTestlet.library.Entities
 
             pretestItems = Shuffle(pretestItems);
 
-            return pretestItems.Take(2).Concat(Shuffle(pretestItems.Skip(2), operationalItems)).ToList();
+            var begginningPretestItems = pretestItems.Take(2);
+            
+            var randomizedOtherItems = Shuffle(pretestItems.Skip(2).Concat(operationalItems));
+
+            return begginningPretestItems.Concat(randomizedOtherItems).ToList();
         }
 
-        private List<Item> Shuffle(params IEnumerable<Item>[] items)
+        private List<Item> Shuffle(IEnumerable<Item> items)
         {
             var rng = new Random();
-            var list = items.SelectMany(i => i).ToList();
+            var list = items.ToList();
 
             int n = list.Count;
 
