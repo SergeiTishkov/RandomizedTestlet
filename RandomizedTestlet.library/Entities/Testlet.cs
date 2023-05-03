@@ -58,18 +58,20 @@ namespace RandomizedTestlet.library.Entities
 
         private List<Item> Shuffle(IEnumerable<Item> items)
         {
-            var rng = new Random();
+            var random = new Random();
             var list = items.ToList();
 
-            int n = list.Count;
+            int swapIndex1 = list.Count;
 
-            while (n > 1)
+            while (swapIndex1 > 1)
             {
-                n--;
-                int k = rng.Next(n + 1);
-                var value = list[k];
-                list[k] = list[n];
-                list[n] = value;
+                swapIndex1--;
+
+                int swaoIndex2 = random.Next(swapIndex1 + 1);
+
+                var value = list[swaoIndex2];
+                list[swaoIndex2] = list[swapIndex1];
+                list[swapIndex1] = value;
             }
 
             return list;
