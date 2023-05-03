@@ -67,10 +67,10 @@ namespace RandomizedTestlet.library.Entities
             {
                 swapIndex1--;
 
-                int swaoIndex2 = random.Next(swapIndex1 + 1);
+                int swapIndex2 = random.Next(swapIndex1 + 1);
 
-                var value = list[swaoIndex2];
-                list[swaoIndex2] = list[swapIndex1];
+                var value = list[swapIndex2];
+                list[swapIndex2] = list[swapIndex1];
                 list[swapIndex1] = value;
             }
 
