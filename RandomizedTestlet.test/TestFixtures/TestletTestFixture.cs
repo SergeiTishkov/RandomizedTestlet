@@ -74,6 +74,24 @@ namespace RandomizedTestlet.test.TestFixtures
             );
         }
 
+        [Test]
+        public void TestletCtorThrowErrorOnNullId()
+        {
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+#pragma warning disable CS8604 // Possible null reference argument.
+            Assert.Throws<ArgumentNullException>(() => new Testlet(null, GetTestItemsDataSource().First().Arguments[0] as List<Item>));
+#pragma warning restore CS8604 // Possible null reference argument.
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+        }
+
+        [Test]
+        public void TestletCtorThrowErrorOnNullTestItems()
+        {
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+            Assert.Throws<ArgumentNullException>(() => new Testlet("some ID", null));
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+        }
+
         [TestCaseSource(nameof(GetTestItemsDataSource))]
         public void TestletCtorDoesntThrowErrorsOnValidData(List<Item> items)
         {
