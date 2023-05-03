@@ -75,6 +75,44 @@ namespace RandomizedTestlet.test.TestFixtures
         }
 
         [TestCaseSource(nameof(GetTestItemsDataSource))]
+        public void TestletCtorDoesntThrowErrorsOnValidData(List<Item> items)
+        {
+            Assert.DoesNotThrow(() => new Testlet("some ID", items));
+        }
+
+        [TestCaseSource(nameof(GetTestItemsDataSource))]
+        public void TestletCtorThrowErrorOnMoreThan4Pretests(List<Item> items)
+        {
+            items.Add(new Item { ItemId = "some test item Id 11", ItemType = ItemTypeEnum.Pretest });
+
+            Assert.Throws<ArgumentException>(() => new Testlet("some ID", items));
+        }
+
+        [TestCaseSource(nameof(GetTestItemsDataSource))]
+        public void TestletCtorThrowErrorOnMoreThan6Operationals(List<Item> items)
+        {
+            items.Add(new Item { ItemId = "some test item Id 11", ItemType = ItemTypeEnum.Operational });
+
+            Assert.Throws<ArgumentException>(() => new Testlet("some ID", items));
+        }
+
+        [TestCaseSource(nameof(GetTestItemsDataSource))]
+        public void TestletCtorThrowErrorOnLessThan4Pretests(List<Item> items)
+        {
+            items.Remove(items.First(item => item.ItemType == ItemTypeEnum.Pretest));
+
+            Assert.Throws<ArgumentException>(() => new Testlet("some ID", items));
+        }
+
+        [TestCaseSource(nameof(GetTestItemsDataSource))]
+        public void TestletCtorThrowErrorOnLessThan6Operationals(List<Item> items)
+        {
+            items.Remove(items.First(item => item.ItemType == ItemTypeEnum.Operational));
+
+            Assert.Throws<ArgumentException>(() => new Testlet("some ID", items));
+        }
+
+        [TestCaseSource(nameof(GetTestItemsDataSource))]
         public void RandomizeDoesntChangeTheCountOfTestTypes(List<Item> items)
         {
             var testlet = new Testlet("some ID", items);
