@@ -11,6 +11,19 @@ namespace RandomizedTestlet.library.Entities
 
         public Testlet(string testletId, List<Item> items)
         {
+            ArgumentNullException.ThrowIfNull(testletId, nameof(testletId));
+            ArgumentNullException.ThrowIfNull(items, nameof(items));
+
+            if (items.Count(i => i.ItemType == ItemTypeEnum.Pretest) != PRETEST_ITEMS_AMOUNT)
+            {
+                throw new ArgumentException($"Amount of Items with ItemType = {ItemTypeEnum.Pretest} is not equal {PRETEST_ITEMS_AMOUNT}");
+            }
+
+            if (items.Count(i => i.ItemType == ItemTypeEnum.Operational) != OPERATIONAL_ITEMS_AMOUNT)
+            {
+                throw new ArgumentException($"Amount of Items with ItemType = {ItemTypeEnum.Operational} is not equal {OPERATIONAL_ITEMS_AMOUNT}");
+            }
+
             TestletId = testletId;
             _items = items;
         }
