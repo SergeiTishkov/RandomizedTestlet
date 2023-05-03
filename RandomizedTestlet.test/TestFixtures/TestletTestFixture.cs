@@ -119,9 +119,9 @@ namespace RandomizedTestlet.test.TestFixtures
 
             var randomizedTestItems = testlet.Randomize();
 
-            Assert.AreEqual(randomizedTestItems.Count, 10);
-            Assert.AreEqual(randomizedTestItems.Count(item => item.ItemType == ItemTypeEnum.Pretest), 4);
-            Assert.AreEqual(randomizedTestItems.Count(item => item.ItemType == ItemTypeEnum.Operational), 6);
+            Assert.AreEqual(randomizedTestItems.Count, Testlet.PRETEST_ITEMS_AMOUNT + Testlet.OPERATIONAL_ITEMS_AMOUNT);
+            Assert.AreEqual(randomizedTestItems.Count(item => item.ItemType == ItemTypeEnum.Pretest), Testlet.PRETEST_ITEMS_AMOUNT);
+            Assert.AreEqual(randomizedTestItems.Count(item => item.ItemType == ItemTypeEnum.Operational), Testlet.OPERATIONAL_ITEMS_AMOUNT);
         }
 
         [TestCaseSource(nameof(GetTestItemsDataSource))]
@@ -181,7 +181,7 @@ namespace RandomizedTestlet.test.TestFixtures
                         return items[i].ItemId != randomizedItems1[i].ItemId ||
                                items[i].ItemId != randomizedItems2[i].ItemId ||
                                randomizedItems1[i].ItemId != randomizedItems2[i].ItemId;
-                    }) > 2
+                    }) > Testlet.PRETEST_ITEMS_AMOUNT
             );
         }
     }

@@ -4,21 +4,25 @@ namespace RandomizedTestlet.library.Entities
 {
     public class Testlet
     {
-        public string TestletId;
-        private List<Item> Items;
+        public const int BEGINNING_PRETEST_ITEMS_AMOUNT = 2;
+        public const int PRETEST_ITEMS_AMOUNT = 4;
+        public const int OPERATIONAL_ITEMS_AMOUNT = 6;
+        private List<Item> _items;
 
         public Testlet(string testletId, List<Item> items)
         {
             TestletId = testletId;
-            Items = items;
+            _items = items;
         }
+
+        public string TestletId { get; private set; }
 
         public List<Item> Randomize()
         {
             var pretestItems = new List<Item>();
             var operationalItems = new List<Item>();
 
-            foreach (var item in Items)
+            foreach (var item in _items)
             {
                 if (item.ItemType == ItemTypeEnum.Pretest)
                 {
@@ -32,9 +36,9 @@ namespace RandomizedTestlet.library.Entities
 
             pretestItems = Shuffle(pretestItems);
 
-            var begginningPretestItems = pretestItems.Take(2);
+            var begginningPretestItems = pretestItems.Take(BEGINNING_PRETEST_ITEMS_AMOUNT);
             
-            var randomizedOtherItems = Shuffle(pretestItems.Skip(2).Concat(operationalItems));
+            var randomizedOtherItems = Shuffle(pretestItems.Skip(BEGINNING_PRETEST_ITEMS_AMOUNT).Concat(operationalItems));
 
             return begginningPretestItems.Concat(randomizedOtherItems).ToList();
         }
